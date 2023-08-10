@@ -22,18 +22,28 @@ router.get("/", async function (req, res) {
   return res.json({ companies });
 });
 
-/**Retrieves the details of specific company
- *Returns the company object like {code, name, description}
+/**Retrieves the details of specific company and it's invoices
+ * //TODO: invoices of .... id 
+ *Returns the company object like {code, name, description, invoices[]}
  */
 router.get("/:code", async function (req, res) {
   let code = req.params.code;
-  const results = await db.query(
+  const cResults = await db.query(
     `SELECT code, name, description
       FROM companies
       WHERE code = $1`, [code]
   );
-  const company = results.rows[0];
+  const company = cResults.rows[0];
   if (company === undefined) throw new NotFoundError(`Not found: ${code}`);
+
+  const iResults = await db.query(
+    `SELECT id
+      FROM invoices
+      WHERE comp_code = $1`, [code]
+  );
+  const invoices = iResults.rows;
+  company.invoices = invoices;
+
   return res.json({ company });
 });
 
@@ -90,7 +100,7 @@ router.delete("/:code", async function (req, res) {
       RETURNING code
       `, [code]
   );
-  const company = results.rows[0]
+  const company = results.rows[0];
   if (company === undefined) throw new NotFoundError(`Not found: ${code}`);
   console.log(results);
   return res.json({ status: "deleted" });
