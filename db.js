@@ -1,3 +1,4 @@
+"use strict";
 /** Database setup for Biztime. */
 
 const { Client } = require("pg");

@@ -1,3 +1,4 @@
+"use strict";
 /** Routes for invoices */
 
 const express = require("express");
