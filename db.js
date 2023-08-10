@@ -2,15 +2,15 @@
 
 const { Client } = require("pg");
 
-/*
+
 const DB_URI = process.env.NODE_ENV === "test"  // 1
     ? "postgresql:///biztime_test"
     : "postgresql:///biztime";
-*/
 
-const DB_URI = process.env.NODE_ENV === "test"  // 1
-    ? "postgresql://earliercuyler:rithm@localhost/biztime_test"
-    : "postgresql://earliercuyler:rithm@localhost/biztime";
+
+// const DB_URI = process.env.NODE_ENV === "test"  // 1
+//     ? "postgresql://earliercuyler:rithm@localhost/biztime_test"
+//     : "postgresql://earliercuyler:rithm@localhost/biztime";
 
 let db = new Client({
   connectionString: DB_URI
