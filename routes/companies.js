@@ -23,7 +23,7 @@ router.get("/", async function (req, res) {
 });
 
 /**Retrieves the details of specific company and it's invoices
- * //TODO: invoices of .... id 
+ * //TODO: invoices of .... id
  *Returns the company object like {code, name, description, invoices[]}
  */
 router.get("/:code", async function (req, res) {
@@ -55,12 +55,12 @@ router.post("/", async function (req, res) {
   if (req.body === undefined) {
     throw new BadRequestError();
   }
-  const body = req.body;
+  const { code, name, description } = req.body;
   const results = await db.query(
     `INSERT INTO companies (code,name,description)
         VALUES ($1 ,$2, $3)
         RETURNING code, name, description`,
-    [body.code, body.name, body.description]
+    [code, name, description]
   );
   const company = results.rows[0];
   return res.status(201).json({ company });
@@ -75,13 +75,13 @@ router.put("/:code", async function (req, res) {
     throw new BadRequestError();
   }
   const code = req.params.code;
-  const body = req.body;
+  const { name, description } = req.body;
   const results = await db.query(
     `UPDATE companies
         SET name = $1, description = $2
         WHERE code = $3
         RETURNING code, name , description`,
-    [body.name, body.description, code]
+    [name, description, code]
   );
   const company = results.rows[0];
   if (company === undefined) throw new NotFoundError(`Not found: ${code}`);

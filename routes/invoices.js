@@ -54,12 +54,12 @@ router.get("/:id", async function (req, res) {
 router.post("/", async function (req, res) {
   if (req.body === undefined) { throw new BadRequestError(); }
   // TODO: destructure instead of storing it in body
-  const body = req.body;
+  const { comp_code, amt } = req.body;
   const result = await db.query(
     `INSERT INTO invoices (comp_code, amt)
       VALUES ($1, $2)
       RETURNING id, comp_code, amt, paid, add_date, paid_date`,
-    [body.comp_code, body.amt]
+    [comp_code, amt]
   );
   const invoice = result.rows[0];
   return res.json({ invoice });
